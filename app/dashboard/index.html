@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Auto Dev Company – Autonomous multi-agent software development pipeline dashboard">
+    <title>Auto Dev Company | Pipeline Dashboard</title>
+    <link rel="stylesheet" href="/dashboard/static/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- ── Header ────────────────────────────────── -->
+        <header class="header" id="header">
+            <div class="header-left">
+                <div class="logo">🤖</div>
+                <div>
+                    <h1>Auto Dev Company</h1>
+                    <div class="header-subtitle">Autonomous Multi-Agent Pipeline</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="provider-badge" id="providerBadge">GEMINI</div>
+                <div class="connection-status">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="connectionText">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ── Tab Navigation ─────────────────────────── -->
+        <nav class="tab-nav" id="tabNav">
+            <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">
+                <span class="tab-icon">📊</span> Live Dashboard
+            </button>
+            <button class="tab-btn" data-tab="projects" onclick="switchTab('projects')">
+                <span class="tab-icon">📁</span> Projects
+            </button>
+        </nav>
+
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- TAB 1: LIVE DASHBOARD                          -->
+        <!-- ══════════════════════════════════════════════ -->
+        <div class="tab-content active" id="tab-dashboard">
+
+            <!-- ── Stats Bar ─────────────────────────────── -->
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-card">
+                    <div class="stat-label">Total Agents</div>
+                    <div class="stat-value" id="statAgents">14</div>
+                    <div class="stat-detail" id="statAgentsDetail">0 active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">LLM Calls</div>
+                    <div class="stat-value" id="statCalls">0</div>
+                    <div class="stat-detail" id="statCallsDetail">0 tokens</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pipeline Progress</div>
+                    <div class="stat-value" id="statProgress">0%</div>
+                    <div class="stat-detail" id="statProgressDetail">Idle</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Est. Cost</div>
+                    <div class="stat-value" id="statCost">$0.00</div>
+                    <div class="stat-detail" id="statCostDetail">—</div>
+                </div>
+            </div>
+
+            <!-- ── Pipeline Progress ─────────────────────── -->
+            <div class="pipeline-progress" id="pipelineProgress">
+                <h2>📊 Pipeline Progress</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+                </div>
+                <div class="pipeline-stages" id="pipelineStages">
+                    <div class="pipeline-stage" data-stage="product_strategist">
+                        <div class="stage-icon">🎯</div>PRD
+                    </div>
+                    <div class="pipeline-stage" data-stage="project_manager">
+                        <div class="stage-icon">📋</div>PM
+                    </div>
+                    <div class="pipeline-stage" data-stage="system_architect">
+                        <div class="stage-icon">🏗️</div>Arch
+                    </div>
+                    <div class="pipeline-stage" data-stage="security_architect">
+                        <div class="stage-icon">🛡️</div>Security
+                    </div>
+                    <div class="pipeline-stage" data-stage="planner">
+                        <div class="stage-icon">📝</div>Plan
+                    </div>
+                    <div class="pipeline-stage" data-stage="code_generation">
+                        <div class="stage-icon">💻</div>Code
+                    </div>
+                    <div class="pipeline-stage" data-stage="critique">
+                        <div class="stage-icon">🔍</div>Critique
+                    </div>
+                    <div class="pipeline-stage" data-stage="self_evaluator">
+                        <div class="stage-icon">🧠</div>Eval
+                    </div>
+                    <div class="pipeline-stage" data-stage="test_writing">
+                        <div class="stage-icon">🧪</div>Tests
+                    </div>
+                    <div class="pipeline-stage" data-stage="refactor">
+                        <div class="stage-icon">♻️</div>Refactor
+                    </div>
+                    <div class="pipeline-stage" data-stage="deployment">
+                        <div class="stage-icon">🚀</div>Deploy
+                    </div>
+                    <div class="pipeline-stage" data-stage="monitoring">
+                        <div class="stage-icon">📈</div>Monitor
+                    </div>
+                    <div class="pipeline-stage" data-stage="quality_evaluator">
+                        <div class="stage-icon">⭐</div>Quality
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Main Grid: Agents + Traces ────────────── -->
+            <div class="main-grid">
+
+                <!-- Agents Panel -->
+                <div class="agents-panel">
+                    <h2>🤖 Agent Status</h2>
+                    <div class="agents-grid" id="agentsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Trace Panel -->
+                <div class="trace-panel">
+                    <h2>🧠 Agent Thinking Traces</h2>
+                    <div class="trace-list" id="traceList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔬</div>
+                            <div class="empty-state-text">
+                                No traces yet.<br>Start a pipeline to see agent thinking chains.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── Token Usage ───────────────────────────── -->
+            <div class="token-panel">
+                <h2>📊 Token Usage by Agent</h2>
+                <div class="token-bars" id="tokenBars">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <div class="empty-state-text">Token usage will appear here during pipeline execution.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Live Log ──────────────────────────────── -->
+            <div class="log-panel">
+                <h2>📋 Live Event Log</h2>
+                <div class="log-stream" id="logStream">
+                    <div class="log-entry">
+                        <span class="log-time">--:--</span>
+                        <span class="log-agent">system</span>
+                        <span class="log-msg">Dashboard initialized. Waiting for pipeline events...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════ -->
+        <!-- TAB 2: PROJECT EXPLORER                        -->
+        <!-- ══════════════════════════════════════════════ -->
+        <div class="tab-content" id="tab-projects">
+
+            <div class="projects-layout">
+
+                <!-- Project Sidebar -->
+                <aside class="project-sidebar" id="projectSidebar">
+                    <h2>📁 Projects</h2>
+                    <div class="project-list" id="projectList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <div class="empty-state-text">No projects yet.<br>Run a pipeline to generate one.</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Project Detail -->
+                <main class="project-detail" id="projectDetail">
+                    <div class="project-detail-empty">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👈</div>
+                            <div class="empty-state-text">Select a project to explore its files, artifacts, and traces.</div>
+                        </div>
+                    </div>
+
+                    <!-- Detail Header (hidden by default) -->
+                    <div class="project-detail-header" id="projectDetailHeader" style="display:none;">
+                        <h2 id="projectDetailTitle">Project</h2>
+                        <div class="project-detail-meta" id="projectDetailMeta"></div>
+                    </div>
+
+                    <!-- Detail Tabs -->
+                    <nav class="detail-tabs" id="detailTabs" style="display:none;">
+                        <button class="detail-tab-btn active" data-dtab="files" onclick="switchDetailTab('files')">📄 Files</button>
+                        <button class="detail-tab-btn" data-dtab="artifacts" onclick="switchDetailTab('artifacts')">🧩 Artifacts</button>
+                        <button class="detail-tab-btn" data-dtab="traces" onclick="switchDetailTab('traces')">🧠 Traces</button>
+                    </nav>
+
+                    <!-- Files Tab -->
+                    <div class="detail-tab-content active" id="dtab-files">
+                        <div class="files-layout">
+                            <div class="file-tree-panel" id="fileTreePanel">
+                                <h3>File Tree</h3>
+                                <div class="file-tree" id="fileTree"></div>
+                            </div>
+                            <div class="code-viewer-panel" id="codeViewerPanel">
+                                <div class="code-viewer-header" id="codeViewerHeader">
+                                    <span class="code-viewer-path" id="codeViewerPath">Select a file to view</span>
+                                    <span class="code-viewer-size" id="codeViewerSize"></span>
+                                </div>
+                                <pre class="code-viewer" id="codeViewer"><code id="codeContent">Select a file from the tree to view its contents.</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Artifacts Tab -->
+                    <div class="detail-tab-content" id="dtab-artifacts">
+                        <div class="artifacts-grid" id="artifactsGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Traces Tab -->
+                    <div class="detail-tab-content" id="dtab-traces">
+                        <div class="trace-list" id="projectTraceList">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/dashboard/static/app.js"></script>
+</body>
+</html>
